@@ -6,7 +6,8 @@ const {MITScheme, paths} = require('mit-scheme');
 const scheme = new MITScheme();
 scheme.pipe(process.stdout);
 process.stdin.pipe(scheme);
-
+```
+```
 > (* 3 4)
 {
   "type": "value",
