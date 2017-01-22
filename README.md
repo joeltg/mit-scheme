@@ -2,7 +2,10 @@
 MIT Scheme wrapped in JavaScript
 
 ```
-const {MITScheme, paths} = require('mit-scheme');
+// creates __dirname/users and __dirname/public folders and spawns chroots inside them
+// writes to /etc/schroot/my-app-name so needs to run with permissions
+
+const MITScheme = require('mit-scheme')(__dirname, 'my-app-name');
 const scheme = new MITScheme();
 scheme.pipe(process.stdout);
 process.stdin.pipe(scheme);
@@ -54,4 +57,4 @@ process.stdin.pipe(scheme);
 >
 ```
 
-You can also pass a `name` into your `new MITScheme(name)` and it'll spawn in a separate isolated chroot jail with its own filesystem.
+You can also pass a username into your `new MITScheme(username)` and it'll spawn in a separate isolated chroot jail with its own filesystem.
