@@ -13,18 +13,23 @@ const add = path.resolve(__dirname, 'scripts', 'add-user.sh');
 const install = path.resolve(__dirname, 'scripts', 'install-root.sh');
 const initialize = path.resolve(__dirname, 'scripts', 'initialize-scheme.sh');
 const start = path.resolve(__dirname, 'scripts', 'start-scheme.sh');
+const users = path.resolve(__dirname, 'users');
 const jail = path.resolve(__dirname, 'jail');
+
 const encoding = 'utf8';
+const names = {[null]: jail};
+const identity = i => !!i;
 
-const cwd = {cwd: __dirname};
+cp.execFile(install, [__dirname], {cwd: __dirname}, error =>
+    fs.readdir(users, (error, files) =>
+        files.forEach(name => names[name] = path.resolve(users, name))));
 
-const superOptions = {
+const options = {
     allowHalfOpen: false,
     decodeStrings: false,
     encoding
 };
 
-const identity = i => i;
 const types = {
     0: 'value',
     1: 'error',
@@ -35,28 +40,16 @@ function mapJSON(data) {
     try {
         return JSON.parse(data);
     } catch (error) {
-        console.warn('Could not parse JSON', error);
+        console.warn('Failed to parse JSON', error);
         return false;
     }
 }
 
-function installRoot(directory) {
-    cp.execFile(install, [directory || __dirname], cwd, error => error && console.error(error));
-}
-
-function addUser(user) {
-    cp.execFile(add, [user], cwd);
-}
-
 class MITScheme extends Duplex {
-    constructor(options) {
-        super(superOptions);
-        const {user, libs} = options || {};
-        this.libs = libs ? '--library /lib' : '';
-        this.user = user || jail;
-        this.uuid = uuidV4();
-        this.args = [this.user, this.uuid, this.libs];
-        this.fifo = path.resolve(this.user, 'pipes', this.uuid);
+    constructor(name) {
+        super(options);
+        this.name = name || null;
+
         this.scheme = null;
         this.stream = null;
         this.buffer = '';
@@ -64,7 +57,25 @@ class MITScheme extends Duplex {
         this.state = 0;
         this.flow = false;
         this.pid = null;
-        cp.execFile(initialize, this.args, cwd, error => this.spawn(error));
+
+        if (this.name in names) {
+            this.attach(null, names[this.name]);
+        } else {
+            const user = path.resolve(users, name);
+            cp.execFile(add, [user], {cwd: __dirname}, error => this.attach(error, user));
+        }
+    }
+    attach(error, user) {
+        if (error) {
+            this.emit('error', error);
+        } else {
+            this.user = user;
+            this.uuid = uuidV4();
+            this.args = [this.user, this.uuid];
+            this.files = path.resolve(this.user, 'files');
+            this.fifo = path.resolve(this.user, 'pipes', this.uuid);
+            cp.execFile(initialize, this.args, {cwd: __dirname}, error => this.spawn(error));
+        }
     }
     spawn(error) {
         if (error) {
@@ -78,8 +89,7 @@ class MITScheme extends Duplex {
             this.stream.on('close', (code, data) => this.close(1));
 
             this.state = 2;
-
-            this.scheme = cp.spawn(start, this.args, cwd);
+            this.scheme = cp.spawn(start, this.args, {cwd: __dirname});
             this.scheme.on('error', error => this.emit('error', error));
             this.scheme.on('exit', (code, signal) => this.close(2));
 
@@ -116,7 +126,9 @@ class MITScheme extends Duplex {
         }
     }
     close(state) {
-        if (typeof state === 'number') this.state = state;
+        if (typeof state === 'number') {
+            this.state = state;
+        }
 
         if (this.state === 3) {
             this.kill('SIGTERM');
@@ -148,4 +160,4 @@ class MITScheme extends Duplex {
     }
 }
 
-module.exports = {MITScheme, installRoot, addUser};
+module.exports = {MITScheme, names};
