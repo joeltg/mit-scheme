@@ -47,6 +47,11 @@ process.stdin.pipe(scheme);
 }
 
 > (graphics-draw-point (make-graphics-device #f) 0 0)
-{"type": "canvas", "data": ["open", 1, [0,300,300,0]]}
-{"type": "canvas", "data": ["draw_point",1,[0,0]]}
+{"type": "canvas", "data": ["open", 1, [0, 300, 300, 0]]}
+{"type": "canvas", "data": ["draw_point", 1, [0, 0]]}
+
+> '*silence*
+>
 ```
+
+You can also pass a `name` into your `new MITScheme(name)` and it'll spawn in a separate isolated chroot jail with its own filesystem.
