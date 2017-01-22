@@ -3,7 +3,8 @@ MIT Scheme wrapped in JavaScript
 
 ```
 // creates __dirname/users and __dirname/public folders and spawns chroots inside them
-// writes to /etc/schroot so needs to run with permissions
+// writes to /etc/schroot/my-app-name so needs to run with permissions
+
 const MITScheme = require('mit-scheme')(__dirname, 'my-app-name');
 const scheme = new MITScheme();
 scheme.pipe(process.stdout);
