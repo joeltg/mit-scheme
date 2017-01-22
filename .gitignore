@@ -3,6 +3,10 @@ logs
 *.log
 npm-debug.log*
 
+.idea
+jail
+users
+
 # Runtime data
 pids
 *.pid

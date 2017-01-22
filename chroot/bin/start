@@ -1,0 +1,4 @@
+args=$1
+libs=$2
+echo $$
+exec /bin/scheme --large --silent --load /utils/load --args ${args} ${libs}
