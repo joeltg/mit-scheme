@@ -4,6 +4,7 @@ MIT Scheme wrapped in JavaScript
 ```
 // creates __dirname/users and __dirname/public folders and spawns chroots inside them
 // writes to /etc/schroot/my-app-name so needs to run with permissions
+// if that's a concern you probably shouldn't be using this in the first place because idk what I'm doing
 
 const MITScheme = require('mit-scheme')(__dirname, 'my-app-name');
 const scheme = new MITScheme();
