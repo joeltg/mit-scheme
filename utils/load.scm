@@ -1,9 +1,9 @@
-(load "utils/json")
-(load "utils/output")
-(load "utils/print")
-(load "utils/error")
-(load "utils/stack")
+(load "/utils/json")
+(load "/utils/output")
+(load "/utils/print")
+(load "/utils/error")
+(load "/utils/stack")
 
-(load "utils/canvas/canvas")
-(load "utils/canvas/install")
+(load "/utils/canvas/canvas")
+(load "/utils/canvas/install")
 
