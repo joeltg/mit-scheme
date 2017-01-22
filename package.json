@@ -1,6 +1,6 @@
 {
   "name": "mit-scheme",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "MIT Scheme wrapped in JavaScript",
   "main": "index.js",
   "scripts": {

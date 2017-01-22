@@ -8,7 +8,7 @@
 (define (get-latex object)
   (ignore-errors
     (lambda ()
-    (expression->tex-string object))))
+      (expression->tex-string object))))
 
 (define (print-undefined)
   (send result-type (string-append "\"" print-open " No return value " print-close "\"")))

@@ -23,7 +23,7 @@ process.stdin.pipe(scheme);
   "type": "value",
   "data": [
     "#|\n(up 1 2 3)\n|#",
-    "\\boxit{ $$\\left( \\matrix{ \\displaystyle{ 1} \\cr \\cr \\displaystyle{ 2} \\cr \\cr \\displaystyle{ 3}} \\right)$$}"
+    "\\left( \\begin{matrix} \\displaystyle{ 1} \\cr \\cr \\displaystyle{ 2} \\cr \\cr \\displaystyle{ 3} \\end{matrix} \\right)"
   ]
 }
 

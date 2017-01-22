@@ -1,3 +1,4 @@
+(load "/utils/latex")
 (load "/utils/json")
 (load "/utils/output")
 (load "/utils/print")
