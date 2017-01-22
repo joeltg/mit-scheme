@@ -31,16 +31,16 @@ process.stdin.pipe(scheme);
 {
   "type": "error",
   "data": [
-    "Unbound variable: fjdsl",
+    "Unbound variable: fjdsklafs",
     [
-      ["use-value", "Specify a value to use instead of fjdsl.", 1],
-      ["store-value", "Define fjdsl to a given value.", 1],
+      ["use-value", "Specify a value to use instead of fjdsklafs.", 1],
+      ["store-value", "Define fjdsklafs to a given value.", 1],
       ["abort", "Return to read-eval-print level 1.", 0]
     ],
     [
       {
         "env": "#[unnamed-procedure]",
-        "exp": "fjdsl\n"
+        "exp": "fjdsklafs\n"
       }
     ]
   ]
