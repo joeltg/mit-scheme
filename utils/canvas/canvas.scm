@@ -106,3 +106,8 @@
   
 (define (canvas-set-foreground-color canvas color)
   (send-canvas canvas 'set_foreground_color color))
+
+(define (canvas-get-pointer-coordinates canvas cont)
+  (send-canvas canvas 'get_pointer_coordinates)
+;  (apply cont (list 1 2 3)))
+  (apply cont (prompt-for-expression "")))

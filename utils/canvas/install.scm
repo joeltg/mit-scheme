@@ -36,7 +36,8 @@
     (erase-points ,(canvas-wrapper canvas-erase-points))
     (erase-rect ,(canvas-wrapper canvas-erase-rect))
     (erase-rects ,(canvas-wrapper canvas-erase-rects))
-    (set-font ,(canvas-wrapper canvas-set-font)))))
+    (set-font ,(canvas-wrapper canvas-set-font))
+    (get-pointer-coordinates ,(canvas-wrapper canvas-get-pointer-coordinates)))))
 
 (define (make-window/canvas width height x y)
   (make-graphics-device 'canvas))
@@ -100,6 +101,7 @@
 (define frame make-display-frame)
 (define window-coordinates graphics-coordinate-limits)
 (define (window-size window) (map 1+ (cddr (graphics-device-coordinate-limits window))))
+(define (get-pointer-coordinates win cont) (graphics-operation win 'get-pointer-coordinates cont))
 
 (define (plot-function window f #!optional x0 x1 dx)
   (if (default-object? x0)
