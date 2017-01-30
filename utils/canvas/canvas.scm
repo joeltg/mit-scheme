@@ -1,27 +1,27 @@
-(define canvases '())
-(define size 300)
+(define *canvases* '())
+(define *canvas-size* 300)
+
+(define (get-pointer-coordinates-default-continuation x y button) *silence*)
+(define get-pointer-coordinates-continuation get-pointer-coordinates-default-continuation)
 
 (define-structure
   (canvas (constructor silently-make-canvas (#!optional xmin xmax ymin ymax)))
-  (id (get-id))
+  (id (*get-id*))
   (xmin 0)
-  (xmax size)
+  (xmax *canvas-size*)
   (ymin 0)
-  (ymax size)
-  (frame-width size)
-  (frame-height size)
+  (ymax *canvas-size*)
+  (frame-width *canvas-size*)
+  (frame-height *canvas-size*)
   (frame-x-position 0)
   (frame-y-position 0))
 
-(define (get-canvas id)
-  (cdr (assq id canvases)))
-
 (define (send-canvas canvas action #!optional value)
-  (send 2 (symbol->json action) (number->string (canvas-id canvas)) (json value)))
+  (*send* 2 (symbol->json action) (number->string (canvas-id canvas)) (json value)))
 
 (define (make-canvas . args)
   (define canvas (apply silently-make-canvas args))
-  (set! canvases (cons (cons (canvas-id canvas) canvas) canvases))
+  (set! *canvases* (cons (cons (canvas-id canvas) canvas) *canvases*))
   (send-canvas canvas 'open (canvas-coordinate-limits canvas))
   canvas)
 
@@ -63,7 +63,8 @@
   (send-canvas canvas 'clear))
 
 (define (canvas-flush canvas)
-  '*silence*)
+;  *silence*)
+  #!unspecific)
 
 (define (canvas-close canvas)
   (send-canvas canvas 'close))
@@ -103,11 +104,13 @@
 
 (define (canvas-set-background-color canvas color)
   (send-canvas canvas 'set_background_color color))
-  
+
 (define (canvas-set-foreground-color canvas color)
   (send-canvas canvas 'set_foreground_color color))
 
 (define (canvas-get-pointer-coordinates canvas cont)
-  (send-canvas canvas 'get_pointer_coordinates)
-;  (apply cont (list 1 2 3)))
-  (apply cont (prompt-for-expression "")))
+  (set! get-pointer-coordinates-continuation
+    (lambda (x y button)
+      (set! get-pointer-coordinates-continuation get-pointer-coordinates-default-continuation)
+      (cont x y button)))
+  (send-canvas canvas 'get_pointer_coordinates))

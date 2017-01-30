@@ -14,8 +14,8 @@
 (define (condition-handler condition)
   (define restarts (condition/restarts condition))
   (define report (condition/report-string condition))
-  (send error-type (string->json report) (restarts->json restarts) (stack->json))
-  (let iter ((invocation (prompt-for-command-expression "" stdio)))
+  (*send* error-type (string->json report) (restarts->json restarts) (stack->json))
+  (let iter ((invocation (prompt-for-command-expression "" *stdio*)))
     (apply invoke-restart
       (list-ref restarts (car invocation))
       (map

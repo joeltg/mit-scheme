@@ -5,7 +5,7 @@
   (/ output 100))
 
 (define-structure (thing (constructor silently-make-thing (f g args vals)))
-  (id (get-id) read-only #t)
+  (id (*get-id*) read-only #t)
   (f #f read-only #t)
   (g #f read-only #t)
   (args #f read-only #t)
