@@ -1,5 +1,16 @@
 (define *canvases* '())
 (define *canvas-size* 300)
+(define *frame-height* 400)
+(define *frame-width* 400)
+(define *foreground-color* "white")
+(define *background-color* "black")
+(define *can-use-colors* #t)
+(define *frame-x-position* (if (eq? 'unix microcode-id/operating-system) -10 532))
+(define *frame-y-position* 0)
+(define *frame-width* (if (eq? 'unix microcode-id/operating-system) 400 100))
+(define *frame-height* (if (eq? 'unix microcode-id/operating-system) 400 100))
+
+
 
 (define (get-pointer-coordinates-default-continuation x y button) *silence*)
 (define get-pointer-coordinates-continuation get-pointer-coordinates-default-continuation)
