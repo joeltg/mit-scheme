@@ -47,10 +47,10 @@ function configure(root, schroot) {
             files.forEach(name => names[name] = path.resolve(users, name))));
 
     class MITScheme extends Duplex {
-        constructor(name) {
+        constructor(name, band) {
             super(options);
             this.name = name || null;
-
+            this.band = band || 'runtime.com';
             this.scheme = null;
             this.stream = null;
             this.buffer = '';
@@ -72,7 +72,7 @@ function configure(root, schroot) {
             } else {
                 this.user = user;
                 this.uuid = uuidV4();
-                this.args = [this.user, this.uuid];
+                this.args = [this.user, this.uuid, this.band];
                 this.files = path.resolve(this.user, 'files');
                 this.fifo = path.resolve(this.user, 'pipes', this.uuid);
                 cp.execFile(initialize, this.args, {cwd: root}, error => this.spawn(error));

@@ -1,4 +1,5 @@
 args=$1
 libs=$2
+band=$3
 echo $$
-exec /bin/scheme --large --silent --library /lib --load /utils/load --args ${args}
+exec /bin/scheme --large --library /lib --band /lib/${band} --load /utils/load --args ${args}
