@@ -1,7 +1,7 @@
 # mit-scheme
-MIT Scheme wrapped in JavaScript, and other things that should never exist.
+MIT Scheme wrapped in JavaScript, and other things that should never exist. 
 
-Scheme is so beautiful it scares some people away, so I made it more ugly by wrapping it in a Node.js duplex stream. 
+Scheme is so beautiful it scares some people away, so I made it more ugly by wrapping it in a Node.js duplex stream. Originally written for the [Ozymandias](https://github.com/joeltg/ozymandias) editor, but spun off for future perverse integrations.
 
 ```
 // creates __dirname/users and __dirname/public folders and spawns chroots inside them
