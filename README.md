@@ -1,5 +1,5 @@
 # mit-scheme
-MIT Scheme wrapped in JavaScript
+MIT Scheme wrapped in JavaScript, and other things that should never exist.
 
 Scheme is so beautiful it scares some people away, so I made it more ugly by wrapping it in a Node.js duplex stream. 
 
