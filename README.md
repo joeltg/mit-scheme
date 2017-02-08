@@ -1,61 +1,86 @@
 # mit-scheme
 MIT Scheme wrapped in JavaScript
 
+Scheme is so beautiful it scares some people away, so I made it more ugly by wrapping it in a Node.js duplex stream. 
+
 ```
 // creates __dirname/users and __dirname/public folders and spawns chroots inside them
 // writes to /etc/schroot/my-app-name so needs to run with permissions
 // if that's a concern you probably shouldn't be using this in the first place because idk what I'm doing
 
 const MITScheme = require('mit-scheme')(__dirname, 'my-app-name');
-const scheme = new MITScheme();
+const scheme = new MITScheme({scmutils: true});
 scheme.pipe(process.stdout);
 process.stdin.pipe(scheme);
 ```
 ```
+;; evaluate expressions by writing them to the stream
+;; don't forget an ending '\n'
 > (* 3 4)
+{"type": "value", "data": {"text": "12"}}
+
+> (define (foo a b) (sqrt (+ (square a) (square b))))
+{"type": "value","data": {"text": "foo", "pretty": "foo\n", "latex": "foo"}}
+
+> (foo 3 4)
+{"type": "value", "data": {"text": "5"}}
+
+;; load with {scmutils: true} for symbolic fun
+> (foo 'x 'y)
 {
-  "type": "value",
-  "data": ["#| 12 |#"]
+  "type": "value", 
+  "data": {
+    "text": "(*number* (expression (sqrt (+ (* x x) (* y y)))))",
+    "pretty": "(sqrt (+ (expt x 2) (expt y 2)))\n",
+    "latex": "\\sqrt{{x}^{2} + {y}^{2}}"
+  }
 }
 
-> (vector 1 2 3)
+;; even more fun
+> (vector 5)
 {
   "type": "value",
-  "data": [
-    "#|\n(up 1 2 3)\n|#",
-    "\\left( \\begin{matrix} \\displaystyle{ 1} \\cr \\cr \\displaystyle{ 2} \\cr \\cr \\displaystyle{ 3} \\end{matrix} \\right)"
-  ]
+  "data": {
+    "text": "#(5)",
+    "pretty": "(up 5)\n",
+    "latex": "\\left( \\begin{matrix} \\displaystyle{ 5}\\end{matrix} \\right)"
+  }
 }
 
-> (pp "hello world")
-{"type": "stdout", "data": "\"hello world\"\n"}
-{"type": "value", "data": ["#| No return value |#"]}
+;; stdout gets its own type
+> (display "hello world")
+{"type": "stdout", "data": "hello world"}
+{"type": "value", "data": {"text": "No return value"}}
 
-> fjdsklafs
+;; very fragile error handling framework
+> fjdkalsjfa
 {
   "type": "error",
-  "data": [
-    "Unbound variable: fjdsklafs",
-    [
-      ["use-value", "Specify a value to use instead of fjdsklafs.", 1],
-      ["store-value", "Define fjdsklafs to a given value.", 1],
-      ["abort", "Return to read-eval-print level 1.", 0]
+  "data": {
+    "message": "Unbound variable: fjdkalsjfa",
+    "stack": [
+      {"env": "#[unnamed-procedure]", "exp": "fjdkalsjfa\n"}
     ],
-    [
-      {
-        "env": "#[unnamed-procedure]",
-        "exp": "fjdsklafs\n"
-      }
+    "restarts": [
+      {"name": "use-value", "report" :"Specify a value to use instead of fjdkalsjfa.", "arity": 1},
+      {"name": "store-value", "report": "Define fjdkalsjfa to a given value.", "arity": 1},
+      {"name": "abort", "report": "Return to read-eval-print level 1.", "arity": 0}
     ]
-  ]
+  }
 }
 
-> (graphics-draw-point (make-graphics-device #f) 0 0)
-{"type": "canvas", "data": ["open", 1, [0, 300, 300, 0]]}
-{"type": "canvas", "data": ["draw_point", 1, [0, 0]]}
+;; index into the restart list to invoke "abort" 
+> (2)
+{"type": "stdout", "data": "\n;"}
+{"type": "stdout", "data": "Abort!"}
 
-> '*silence*
->
+;; custom graphics device called "canvas"
+> (define win (make-graphics-device 'canvas))
+{"type": "canvas", "data": {"action": "open", "id":0, "value": [0,300,300,0]}}
+{"type": "value", "data": {"text": "win", "pretty": "win\n", "latex": "win"}}
+
+> (graphics-draw-point win 100 100)
+{"type": "canvas", "data": {"action": "draw_point", "id": 0, "value": [100, 100]}}
+{"type": "value", "data": {"text": "No return value"}}
+
 ```
-
-You can also pass a username into your `new MITScheme(username)` and it'll spawn in a separate isolated chroot jail with its own filesystem.
