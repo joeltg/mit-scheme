@@ -4,6 +4,10 @@ MIT Scheme wrapped in JavaScript, and other things that should never exist.
 Scheme is so beautiful it scares some people away, so I made it more ugly by wrapping it in a Node.js duplex stream. Originally written for the [Ozymandias](https://github.com/joeltg/ozymandias) editor, but spun off for future perverse integrations.
 
 ```
+sudo npm install -g mit-scheme
+```
+
+```
 const MITScheme = require('mit-scheme');
 const scheme = new MITScheme({scmutils: true});
 scheme.pipe(process.stdout);
