@@ -4,11 +4,11 @@ MIT Scheme wrapped in JavaScript, and other things that should never exist.
 Scheme is so beautiful it scares some people away, so I made it more ugly by wrapping it in a Node.js duplex stream. Originally written for the [Ozymandias](https://github.com/joeltg/ozymandias) editor, but spun off for future perverse integrations.
 
 ```
-// creates __dirname/users and __dirname/public folders and spawns chroots inside them
-// writes to /etc/schroot/my-app-name so needs to run with permissions
-// if that's a concern you probably shouldn't be using this in the first place because idk what I'm doing
+sudo npm install -g mit-scheme
+```
 
-const MITScheme = require('mit-scheme')(__dirname, 'my-app-name');
+```
+const MITScheme = require('mit-scheme');
 const scheme = new MITScheme({scmutils: true});
 scheme.pipe(process.stdout);
 process.stdin.pipe(scheme);
