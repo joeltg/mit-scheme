@@ -4,8 +4,8 @@
   "description": "MIT Scheme wrapped in JavaScript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "./scripts/install.sh"
+    "test": "nodejs test.js",
+    "install": "scripts/install.sh"
   },
   "repository": {
     "type": "git",
