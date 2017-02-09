@@ -10,8 +10,6 @@
 (define *frame-width* (if (eq? 'unix microcode-id/operating-system) 400 100))
 (define *frame-height* (if (eq? 'unix microcode-id/operating-system) 400 100))
 
-
-
 (define (get-pointer-coordinates-default-continuation x y button) *silence*)
 (define get-pointer-coordinates-continuation get-pointer-coordinates-default-continuation)
 

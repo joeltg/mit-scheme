@@ -1,8 +1,8 @@
 (define *pipe* (open-output-file (car (command-line))))
 (define *stdio* console-i/o-port)
 (define *delimiter* #\newline)
-(define *environment* (the-environment))
-(define *scmutils* (environment-bound? *environment* 'D))
+(define *the-environment* (the-environment))
+(define *scmutils* (environment-bound? *the-environment* 'D))
 (define *silence* '*silence*)
 (define *id* 0)
 

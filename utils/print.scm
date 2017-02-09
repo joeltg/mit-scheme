@@ -1,5 +1,7 @@
+(define pe)
+(define print-expression)
+
 (let ()
-  (define result-type 0)
 
   (define (rlookup key table)
     (cond ((null? table) #f)
@@ -37,18 +39,21 @@
     (disjunction boolean? null? number? pathname? global? solution? operator?))
 
   (define (get-latex object)
-    (ignore-errors
-      (lambda ()
-        (expression->tex-string object))))
+    ;(ignore-errors
+      ;(lambda ()
+        (expression->tex-string object)
+        ;))
 
-  (define (print-undefined)
+        )
+
+  (define (print-undefined result-type)
     (*send* result-type "\"No return value\""))
 
-  (define (print-string . strings)
+  (define (print-string result-type . strings)
     (apply *send* result-type (map string->json strings)))
 
-  (define (print-unsimplifiable object)
-    (print-string (write-to-string object)))
+  (define (print-unsimplifiable result-type object)
+    (print-string result-type (write-to-string object)))
 
   (define (simple expr)
     (or
@@ -57,40 +62,52 @@
         (apply object-name expr (system-environments)))
       (arg-suppressor (simplify expr))))
 
-  (define (print-simplifiable object)
+  (define (print-simplifiable result-type object)
     (if *scmutils*
       (let ((val (simple object)))
         (if (unsimplifiable? val)
           (print-unsimplifiable val)
-          (print-complex object val)))
-      (print-unsimplifiable object)))
+          (print-complex result-type object val)))
+      (print-unsimplifiable result-type object)))
 
-  (define (print-complex object val)
+  (define (print-complex result-type object val)
     (let ((string (open-output-string)))
       (pp val string)
       (print-string
+        result-type
         (write-to-string object)
         (get-output-string string)
         (get-latex val))))
 
-  (define (print-record object)
+  (define (print-record result-type object)
     (let ((name (record-type-name (record-type-descriptor object)))
           (description (record-description object))
           (string (open-output-string)))
       (pp `(*record* ,name ,@description) string)
-      (print-string (write-to-string object) (get-output-string string))))
+      (print-string
+        result-type
+        (write-to-string object)
+        (get-output-string string))))
 
-  (define (repl-write object s-expression environment repl)
+  (define (*print* result-type object)
     (cond
       ((eq? *silence* object))
       ((undefined-value? object)
-        (print-undefined))
+        (print-undefined result-type))
       ((unsimplifiable? object)
-        (print-unsimplifiable object))
+        (print-unsimplifiable result-type object))
       ((simplifiable? object)
-        (print-simplifiable object))
+        (print-simplifiable result-type object))
       ((record? object)
         (print-record object))
-      (else (print-unsimplifiable object))))
+      (else (print-unsimplifiable result-type object))))
 
-  (set! hook/repl-write repl-write))
+  (define (repl-write object s-expression environment repl)
+    (*print* 0 object))
+
+  (set! hook/repl-write repl-write)
+
+  (define (*print-expression* object)
+    (*print* 3 object))
+  (set! print-expression *print-expression*)
+  (set! pe *print-expression*))

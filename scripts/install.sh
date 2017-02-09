@@ -1,21 +1,16 @@
 #!/usr/bin/env bash
 
-path=$1
-root=$2
-schroot=$3
-public=${root}/public
-dir=/etc/schroot/${schroot}
+path=`realpath $(dirname $0)/..`
+jail=${path}/jail
+dir=/etc/schroot/mit-scheme
 
-mkdir -p ${root}/users ${public}/{etc,pipes,files,tmp} ${dir}
-
-chmod a+w ${public} ${public}/{files,pipes}
+mkdir -p ${dir}
 
 config="
 CHROOT_DIRECTORY=\${USER_PATH}
-
-SETUP_COPYFILES=${schroot}/copyfiles
-SETUP_NSSDATABASES=${schroot}/nssdatabases
-SETUP_FSTAB=${schroot}/fstab
+SETUP_COPYFILES=mit-scheme/copyfiles
+SETUP_NSSDATABASES=mit-scheme/nssdatabases
+SETUP_FSTAB=mit-scheme/fstab
 "
 
 fstab="
@@ -31,15 +26,15 @@ echo "/etc/resolv.conf" > ${dir}/copyfiles
 echo ""                 > ${dir}/nssdatabases
 
 conf="
-[${schroot}]
+[mit-scheme]
 type=directory
-directory=${public}
+directory=${jail}
 groups=users
 root-groups=root,sudo
-profile=${schroot}
+profile=mit-scheme
 shell=/bin/bash
-user.path=${public}
+user.path=${jail}
 user-modifiable-keys=user.path
 "
 
-echo "${conf}" > /etc/schroot/chroot.d/${schroot}.conf
+echo "${conf}" > /etc/schroot/chroot.d/mit-scheme.conf

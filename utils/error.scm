@@ -17,7 +17,12 @@
   (*send* error-type (string->json report) (restarts->json restarts) (stack->json))
   (let iter ((invocation (prompt-for-command-expression "" *stdio*)))
     (apply invoke-restart
-      (list-ref restarts (car invocation))
+      (if (number? (car invocation))
+        (list-ref restarts (car invocation))
+        (find
+          (lambda (restart)
+            (eq? (restart/name restart) (car invocation)))
+          restarts))
       (map
         (lambda (expression)
           (bind-condition-handler
