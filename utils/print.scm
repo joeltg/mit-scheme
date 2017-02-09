@@ -39,15 +39,9 @@
     (disjunction boolean? null? number? pathname? global? solution? operator?))
 
   (define (get-latex object)
-    ;(ignore-errors
-      ;(lambda ()
-        (expression->tex-string object)
-        ;))
-
-        )
-
-  (define (print-undefined result-type)
-    (*send* result-type "\"No return value\""))
+    (ignore-errors
+      (lambda ()
+        (expression->tex-string object))))
 
   (define (print-string result-type . strings)
     (apply *send* result-type (map string->json strings)))
@@ -92,8 +86,6 @@
   (define (*print* result-type object)
     (cond
       ((eq? *silence* object))
-      ;((undefined-value? object)
-      ;  (print-undefined result-type))
       ((unsimplifiable? object)
         (print-unsimplifiable result-type object))
       ((simplifiable? object)
