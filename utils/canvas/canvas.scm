@@ -15,7 +15,7 @@
 
 (define-structure
   (canvas (constructor silently-make-canvas (#!optional xmin xmax ymin ymax)))
-  (id (*get-id*))
+  (id 0)
   (xmin 0)
   (xmax *canvas-size*)
   (ymin 0)
@@ -30,6 +30,7 @@
 
 (define (make-canvas . args)
   (define canvas (apply silently-make-canvas args))
+  (set-canvas-id! canvas (hash canvas))
   (set! *canvases* (cons (cons (canvas-id canvas) canvas) *canvases*))
   (send-canvas canvas 'open (canvas-coordinate-limits canvas))
   canvas)

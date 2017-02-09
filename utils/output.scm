@@ -4,10 +4,6 @@
 (define *the-environment* (the-environment))
 (define *scmutils* (environment-bound? *the-environment* 'D))
 (define *silence* '*silence*)
-(define *id* 0)
-
-(define (*get-id*)
-  (set! *id* (1+ *id*)))
 
 (define (*send* . args)
   (write-char #\[ *pipe*)
