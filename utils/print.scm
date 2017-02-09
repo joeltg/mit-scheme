@@ -91,7 +91,7 @@
       ((simplifiable? object)
         (print-simplifiable result-type object))
       ((record? object)
-        (print-record object))
+        (print-record result-type object))
       (else (print-unsimplifiable result-type object))))
 
   (define (repl-write object s-expression environment repl)
