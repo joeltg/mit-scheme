@@ -1,8 +1,11 @@
 {
   "name": "mit-scheme",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "MIT Scheme wrapped in JavaScript",
   "main": "index.js",
+  "config": {
+    "unsafe-perm": false
+  },
   "scripts": {
     "test": "nodejs test.js",
     "install": "scripts/install.sh"

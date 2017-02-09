@@ -92,8 +92,8 @@
   (define (*print* result-type object)
     (cond
       ((eq? *silence* object))
-      ((undefined-value? object)
-        (print-undefined result-type))
+      ;((undefined-value? object)
+      ;  (print-undefined result-type))
       ((unsimplifiable? object)
         (print-unsimplifiable result-type object))
       ((simplifiable? object)
