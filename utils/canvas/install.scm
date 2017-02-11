@@ -96,6 +96,13 @@
 (define (window-size window) (map 1+ (cddr (graphics-device-coordinate-limits window))))
 (define (get-pointer-coordinates win cont) (graphics-operation win 'get-pointer-coordinates cont))
 
+(define (plot-line-internal window x0 y0 x1 y1)
+  (graphics-draw-line window
+    (exact->inexact x0)
+    (exact->inexact y0)
+    (exact->inexact x1)
+    (exact->inexact y1)))
+
 (define (plot-function window f #!optional x0 x1 dx)
   (if (default-object? x0)
       (let ((bounds (window-coordinates window)) (size (window-size window)))
