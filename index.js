@@ -3,7 +3,6 @@ const {execFile, spawn} = require('child_process')
 const {resolve} = require('path')
 const {Duplex} = require('stream')
 const uuidV4 = require('uuid/v4')
-
 const delimiter = '\n'
 const encoding = 'utf8'
 const identity = i => i

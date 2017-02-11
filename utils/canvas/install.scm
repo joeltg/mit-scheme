@@ -1,5 +1,15 @@
 (define (canvas-open generator . args)
-  (generator (apply make-canvas args)))
+  (let ((canvas (apply make-canvas args)))
+    (let ((device (generator canvas)))
+      (set-canvas-id! canvas (hash device))
+      (send-canvas canvas 'open (canvas-coordinate-limits canvas))
+      device)))
+
+(define (*safe-graphics-close* graphics-device)
+  (ignore-errors
+    (lambda ()
+      (graphics-close graphics-device)))
+  *silence*)
 
 (define descriptor)
 
@@ -43,24 +53,7 @@
   (make-graphics-device 'canvas))
 
 (define (make-window width height x y #!optional display)
-  (let ((window
-         (let ((name (graphics-type-name (graphics-type #f))))
-           (let ((temp name))
-             (cond ((eq? temp 'x) (if (default-object? display) (set! display #f))
-                                  (make-window/x11 width height x y display))
-                   ((eq? temp 'win32)
-                    (if (not (default-object? display))
-                        (error "No remote Win32 display"))
-                    (make-window/win32 width height x y))
-                   ((eq? temp 'os/2)
-                    (if (not (default-object? display))
-                        (error "No remote OS/2 display"))
-                    (make-window/os2 width height x y))
-                   ((eq? temp 'canvas)
-                    (if (not (default-object? display))
-                        (error "No remove Canvas display"))
-                    (make-window/canvas width height x y))
-                   (else (error "Unsupported graphics type:" name)))))))
+  (let ((window (make-window/canvas width height x y)))
     (graphics-set-coordinate-limits window 0 (- (- height 1)) (- width 1) 0)
     window))
 

@@ -1,4 +1,3 @@
-(define *canvases* '())
 (define *canvas-size* 300)
 (define *frame-height* 400)
 (define *frame-width* 400)
@@ -14,7 +13,7 @@
 (define get-pointer-coordinates-continuation get-pointer-coordinates-default-continuation)
 
 (define-structure
-  (canvas (constructor silently-make-canvas (#!optional xmin xmax ymin ymax)))
+  (canvas (constructor make-canvas (#!optional xmin xmax ymin ymax)))
   (id 0)
   (xmin 0)
   (xmax *canvas-size*)
@@ -27,13 +26,6 @@
 
 (define (send-canvas canvas action #!optional value)
   (*send* 2 (symbol->json action) (number->string (canvas-id canvas)) (json value)))
-
-(define (make-canvas . args)
-  (define canvas (apply silently-make-canvas args))
-  (set-canvas-id! canvas (hash canvas))
-  (set! *canvases* (cons (cons (canvas-id canvas) canvas) *canvases*))
-  (send-canvas canvas 'open (canvas-coordinate-limits canvas))
-  canvas)
 
 (define (canvas-available? . args) #t)
 

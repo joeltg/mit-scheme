@@ -7,4 +7,3 @@
 
 (load "/utils/canvas/canvas")
 (load "/utils/canvas/install")
-
