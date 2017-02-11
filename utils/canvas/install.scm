@@ -102,11 +102,7 @@
         (set! x0 (car bounds))
         (set! x1 (cadr bounds))
         (set! dx (/ (- x1 x0) (car size)))))
-  (if *gnuplotting*
-      (newline *gnuplotting*))
   (let loop ((x x0) (fx (f x0)))
-    (if *gnuplotting*
-        (begin (newline *gnuplotting*) (write x *gnuplotting*) (display " " *gnuplotting*) (write fx *gnuplotting*)))
     (let ((nx (+ x dx)))
       (let ((nfx (f nx)))
         (plot-line-internal window x fx nx nfx)
