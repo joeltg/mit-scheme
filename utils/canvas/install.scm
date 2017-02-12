@@ -103,6 +103,9 @@
     (exact->inexact x1)
     (exact->inexact y1)))
 
+(define (plot-point-internal window x y)
+  (graphics-draw-point window (exact->inexact x) (exact->inexact y)))
+
 (define (plot-function window f #!optional x0 x1 dx)
   (if (default-object? x0)
       (let ((bounds (window-coordinates window)) (size (window-size window)))
@@ -115,3 +118,6 @@
         (plot-line-internal window x fx nx nfx)
         (if (< (* (- nx x0) (- nx x1)) 0.)
             (loop nx nfx))))))
+
+(define (plot-point window x y)
+  (plot-point-internal window x y))
