@@ -60,7 +60,7 @@
     (if *scmutils*
       (let ((val (simple object)))
         (if (unsimplifiable? val)
-          (print-unsimplifiable val)
+          (print-unsimplifiable result-type val)
           (print-complex result-type object val)))
       (print-unsimplifiable result-type object)))
 
